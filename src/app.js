@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 
 // your code goes here
 app.get("/mario", (req, res) => {
-    marioModel.find().then(data => res.send(data[0]));
+    marioModel.find().then(data => res.send(data));
 });
 
 app.get("/mario/:id", (req, res) => {
