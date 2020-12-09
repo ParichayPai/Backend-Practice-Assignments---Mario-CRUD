@@ -13,7 +13,11 @@ app.use(bodyParser.json())
 
 // your code goes here
 app.get("/mario", (req, res) => {
-    marioModel.find().then(data => res.send(data));
+    marioModel.find()
+    .then(data => res.send(data))
+    .catch((error)=>{
+        res.status(400).json({"message": error.message});
+    })
 });
 
 app.get("/mario/:id", (req, res) => {
