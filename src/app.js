@@ -44,10 +44,7 @@ app.post("/mario", (req, res) => {
 });
 
 app.patch("/mario/:id", (req, res) => {
-    marioModel.findById(req.params.id, {
-        name : req.body.name,
-        weight : req.body.weight
-    }, {new:true})
+    marioModel.findById(req.params.id, req.body, {new:true})
     .then(data => res.status(200).json(data))
     .catch(err => res.status(400).json({"message" : err.message}))
 })
