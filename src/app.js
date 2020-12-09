@@ -13,7 +13,13 @@ app.use(bodyParser.json())
 
 // your code goes here
 app.get("/mario", (req, res) => {
-    marioModel.find().then(data => res.send(data));
+    marioModel.find().then(data => res.send(data[0]));
+});
+
+app.get("/mario/:id", (req, res) => {
+    marioModel.findOne({_id:req.params.id})
+        .then(data => res.send(data))
+        .catch(err => res.status(400).send({message : err.message}))
 });
 
 app.post("/mario", (req, res) => {
@@ -28,12 +34,6 @@ app.post("/mario", (req, res) => {
     char.save().then(res.send("data added"))
 });
 
-app.get("/mario/:id", (req, res) => {
-    marioModel.findOne({_id:req.params.id})
-        .then(data => res.send(data[0]))
-        .catch(err => res.status(400).send({message : err.message}))
-});
-
 app.patch("/mario/:id", (req, res) => {
     marioModel.findOneAndUpdate({_id: req.params.id}, {
         name : req.body.name,
@@ -46,7 +46,6 @@ app.patch("/mario/:id", (req, res) => {
 app.delete("/mario/:id", (req, res) => {
     marioModel.deleteOne({_id: req.params.id})
     .then(data => {
-        console.log(data);
         return res.status(200).send({message:"character deleted"})
     })
     .catch(err => res.status(400).send({message:err.message}))
