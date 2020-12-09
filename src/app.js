@@ -12,7 +12,37 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // your code goes here
+app.get("/mario", (req, res) => {
+    marioModel.find().then(data => res.send(data));
+});
 
+app.post("/mario", (req, res) => {
+    let char = new marioModel({
+        name:req.body.name,
+        weight:req.body.weight
+    });
+    char.save().then(res.send("data added"));
+});
 
+app.get("/mario/:id", (req, res) => {
+    marioModel.find({_id:req.params.id})
+        .then(data => res.send(data[0]))
+        .catch(err => res.send({message : err.message}))
+});
+
+app.patch("/mario/:id", (req, res) => {
+    marioModel.findOneAndUpdate({_id: req.params.id}, {
+        name : req.body.name,
+        weight : req.body.weight
+    })
+    .then(res.send(char))
+    .catch(err => res.status(400).send({message : err.message}))
+})
+
+app.delete("/mario/:id", (req, res) => {
+    marioModel.deleteOne({_id: req.params.id})
+    .then(res.status(200).send({message:"character deleted"}))
+    .catch(err => res.status(400).send({message:err.message}))
+})
 
 module.exports = app;
