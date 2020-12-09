@@ -44,7 +44,7 @@ app.post("/mario", (req, res) => {
 });
 
 app.patch("/mario/:id", (req, res) => {
-    marioModel.findOneAndUpdate({_id: req.params.id}, {
+    marioModel.findById(req.params.id, {
         name : req.body.name,
         weight : req.body.weight
     }, {new:true})
