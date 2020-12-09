@@ -14,28 +14,35 @@ app.use(bodyParser.json())
 // your code goes here
 app.get("/mario", (req, res) => {
     marioModel.find()
-    .then(data => res.json(data))
+    .then((result)=>{
+        res.json(result);
+    })
     .catch((error)=>{
         res.status(400).json({"message": error.message});
     })
 });
 
 app.get("/mario/:id", (req, res) => {
-    marioModel.findOne({_id:req.params.id})
-        .then(data => res.json(data))
-        .catch(err => res.status(400).send({message : err.message}))
-});
+    marioModel.findById(req.params.id)
+    .then((result) => {
+        res.json(result);
+    })
+    .catch((error)=>{
+        res.status(400).json({"message": error.message});
+    })});
 
 app.post("/mario", (req, res) => {
-    let char = new marioModel({
-        name:req.body.name,
-        weight:req.body.weight
-    });
-    if(!char.name || !char.weight){
-        res.status(400).send({message : "either name or weight is missing"});
-        return;
-    }
-    char.save().then(res.send("data added"))
+    let newMario = new marioModel({
+        name : req.body.name,
+        weight: req.body.weight
+    })
+    newMario.save()
+    .then((result)=>{
+        res.status(201).json(result);
+    })
+    .catch((error)=>{
+        res.status(400).json({"message": 'either name or weight is missing'});
+    })
 });
 
 app.patch("/mario/:id", (req, res) => {
@@ -50,9 +57,9 @@ app.patch("/mario/:id", (req, res) => {
 app.delete("/mario/:id", (req, res) => {
     marioModel.deleteOne({_id: req.params.id})
     .then(data => {
-        return res.status(200).send({message:"character deleted"})
+        return res.status(200).send({"message":"character deleted"})
     })
-    .catch(err => res.status(400).send({message:err.message}))
+    .catch(err => res.status(400).json({"message":err.message}))
 })
 
 module.exports = app;
