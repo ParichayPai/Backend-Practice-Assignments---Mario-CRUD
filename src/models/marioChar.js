@@ -7,4 +7,4 @@ const marioModel = new mongoose.Schema({
 })
 
 
-module.exports = marioModel  //mongoose.model("marioModel", marioModel);
+module.exports = mongoose.model("marioModel", marioModel);
