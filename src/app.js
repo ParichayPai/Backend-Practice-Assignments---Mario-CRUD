@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // your code goes here
-app.get("mario", (req, res) => {
+app.get("/mario", (req, res) => {
     marioModel.find().then(data => res.send(data));
 });
 
@@ -21,13 +21,17 @@ app.post("/mario", (req, res) => {
         name:req.body.name,
         weight:req.body.weight
     });
-    char.save().then(res.send("data added"));
+    if(!char.name || !char.weight){
+        res.status(400).send({message : "either name or weight is missing"});
+        return;
+    }
+    char.save().then(res.send("data added"))
 });
 
 app.get("/mario/:id", (req, res) => {
     marioModel.find({_id:req.params.id})
         .then(data => res.send(data[0]))
-        .catch(err => res.send({message : err.message}))
+        .catch(err => res.status(400).send({message : err.message}))
 });
 
 app.patch("/mario/:id", (req, res) => {
