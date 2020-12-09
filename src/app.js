@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // your code goes here
-app.get("/mario", (req, res) => {
+app.get("mario", (req, res) => {
     marioModel.find().then(data => res.send(data));
 });
 
