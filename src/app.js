@@ -29,7 +29,7 @@ app.post("/mario", (req, res) => {
 });
 
 app.get("/mario/:id", (req, res) => {
-    marioModel.find({_id:req.params.id})
+    marioModel.findOne({_id:req.params.id})
         .then(data => res.send(data[0]))
         .catch(err => res.status(400).send({message : err.message}))
 });
@@ -45,7 +45,10 @@ app.patch("/mario/:id", (req, res) => {
 
 app.delete("/mario/:id", (req, res) => {
     marioModel.deleteOne({_id: req.params.id})
-    .then(res.status(200).send({message:"character deleted"}))
+    .then(data => {
+        console.log(data);
+        return res.status(200).send({message:"character deleted"})
+    })
     .catch(err => res.status(400).send({message:err.message}))
 })
 
